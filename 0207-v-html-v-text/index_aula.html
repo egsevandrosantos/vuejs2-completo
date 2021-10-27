@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./../vue.js"></script>
+    <title>V-HTML & V-Text</title>
+  </head>
+  <body>
+    <div id="app">
+      <div>{{ link }} texto</div>
+      <div v-html="link">texto que será substituido</div>
+
+      <p>{{ fruta }} texto</p>
+      <p v-text="fruta">texto que será substituido</p>
+
+      <p v-once>Valor inicial: R$ {{ (total - gasto).toFixed(2) }}</p>
+      <button @click="gasto += 5">Comprar banana R$ 5</button>
+      <p>Total gasto: R$ {{ gasto.toFixed(2) }}</p>
+      <p>Valor final: R$ {{ (total - gasto).toFixed(2) }}</p>
+    </div>
+
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          link: "<a href='https://www.origamid.com'>Origamid</a>",
+          fruta: "Banana",
+          total: 150,
+          gasto: 20,
+        },
+      });
+    </script>
+  </body>
+</html>

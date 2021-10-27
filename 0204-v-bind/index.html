@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./../vue.js"></script>
+    <title>V-Bind</title>
+  </head>
+  <body>
+    <!--
+    Utilizando as API's
+    https://api.origamid.dev/stock/aapl/quote
+    https://api.origamid.dev/stock/googl/quote
+
+    - Compare o marketCap (valor de
+    mercado) entre ambas.
+
+    - Mostre o nome das empresas e o valor
+    na interace (companyName e marketCap).
+
+    - Mude a cor para verde o nome da empresa com
+    maior marketCap e vermelho a com menor.
+    -->
+    <div id="app">
+      <div v-if="acoesAapl && acoesGoogl">
+        <p
+          :style="{color: acoesAapl.marketCap >= acoesGoogl.marketCap ? 'green' : 'red'}"
+        >
+          {{ acoesAapl.companyName }} - {{ acoesAapl.marketCap }}
+        </p>
+        <p
+          :style="{color: acoesAapl.marketCap <= acoesGoogl.marketCap ? 'green' : 'red'}"
+        >
+          {{ acoesGoogl.companyName }} - {{ acoesGoogl.marketCap }}
+        </p>
+      </div>
+      <div v-if="!(acoesAapl && acoesGoogl)">Carregando...</div>
+    </div>
+
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          acoesAapl: undefined,
+          acoesGoogl: undefined,
+        },
+      });
+
+      (async () => {
+        const acoesAapl = await fetch(
+          "https://api.origamid.dev/stock/aapl/quote"
+        );
+        vm.acoesAapl = await acoesAapl.json();
+
+        const acoesGoogl = await fetch(
+          "https://api.origamid.dev/stock/googl/quote"
+        );
+        vm.acoesGoogl = await acoesGoogl.json();
+      })();
+    </script>
+  </body>
+</html>

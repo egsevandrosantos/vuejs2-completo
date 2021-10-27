@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./../vue.js"></script>
+    <title>V-Model</title>
+  </head>
+  <body>
+    <!-- 
+      1 - Crie um criador de botões.
+
+      O usuário poderá definir:
+      width,
+      height,
+      font-size,
+      font-family,
+      text-align,
+      background,
+      color,
+      border-radius,
+
+      As escolhas serão feitas em campos de
+      formulário. Cada escolha deverá ser 
+      refletida em um elemento (o botão).
+
+
+      2 - Crie um formulário com, nome, email, telefone e mensagem.
+      Ao clicar em enviar, as informações preenchidas no formulário
+      devem aparecer abaixo do mesmo. (previna o comportamento padrão do botão enviar)
+    -->
+    <div id="app">
+      <p>
+        <label for="width">Width</label>
+        <input type="number" id="width" v-model.number.lazy="estilo.width" /> px
+      </p>
+      <p>
+        <label for="height">Height</label>
+        <input type="number" id="height" v-model.number.lazy="estilo.height" />
+        px
+      </p>
+      <p>
+        <label for="fontSize">Font size</label>
+        <input
+          type="number"
+          id="fontSize"
+          v-model.number.lazy="estilo.fontSize"
+        />
+        px
+      </p>
+      <p>
+        <label for="fontFamily">Font family</label>
+        <select id="fontFamily" v-model="estilo.fontFamily">
+          <option disabled value="undefined">Selecione</option>
+          <option
+            v-for="({name, value}) in listFontFamily"
+            :value="value"
+            :key="value"
+          >
+            {{ name }}
+          </option>
+        </select>
+      </p>
+      <p>
+        <label for="textAlign">Text align</label>
+        <select id="textAlign" v-model="estilo.textAlign">
+          <option value="undefined" disabled>Selecione</option>
+          <option
+            v-for="({name, value}) in listTextAlign"
+            :value="value"
+            :key="value"
+          >
+            {{ name }}
+          </option>
+        </select>
+      </p>
+      <p>
+        <label for="background">Background</label>
+        <input type="color" id="background" v-model.lazy="estilo.background" />
+      </p>
+      <p>
+        <label for="color">Color</label>
+        <input type="color" id="color" v-model.lazy="estilo.color" />
+      </p>
+      <p>
+        <label for="borderRadius">Border radius</label>
+        <input
+          type="number"
+          id="borderRadius"
+          v-model.number.lazy="estilo.borderRadius"
+        />
+        px
+      </p>
+      <button @click.prevent="gerarBotao">Gerar botão</button>
+      <div id="btnsGerados"></div>
+
+      <hr />
+
+      <p>
+        <label for="nome">Nome</label>
+        <input type="text" name="nome" id="nome" v-model.lazy="form.nome" />
+      </p>
+      <p>
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" v-model.lazy="form.email" />
+      </p>
+      <p>
+        <label for="telefone">Telefone</label>
+        <input
+          type="number"
+          name="telefone"
+          id="telefone"
+          v-model.lazy.number="form.telefone"
+        />
+      </p>
+      <p>
+        <label for="mensagem">Mensagem</label>
+        <textarea
+          name="mensagem"
+          id="mensagem"
+          cols="30"
+          rows="10"
+          v-model.lazy="form.mensagem"
+        ></textarea>
+      </p>
+      <button @click.prevent="enviarForm = true">Enviar</button>
+
+      <p v-show="enviarForm" v-for="(field, key) in form">
+        {{ key[0].toUpperCase() + key.slice(1) }}: {{ field }}
+      </p>
+    </div>
+
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          estilo: {
+            width: undefined,
+            height: undefined,
+            fontSize: undefined,
+            fontFamily: undefined,
+            textAlign: undefined,
+            background: "#000000",
+            color: "#000000",
+            borderRadius: undefined,
+          },
+          form: {
+            nome: undefined,
+            email: undefined,
+            telefone: undefined,
+            mensagem: undefined,
+          },
+          enviarForm: false,
+        },
+        methods: {
+          gerarBotao() {
+            if (this.validarDadosBotao()) {
+              this.gerarElementoBotao();
+              this.limparFormularioBotao();
+            }
+          },
+          limparFormularioBotao() {
+            for (const estilo in this.estilo) {
+              this.estilo[estilo] = undefined;
+            }
+            this.estilo.background = "#000000";
+            this.estilo.color = "#000000";
+          },
+          gerarElementoBotao() {
+            const btn = document.createElement("button");
+            for (const estilo in this.estilo) {
+              btn.style[estilo] = this.estilo[estilo];
+            }
+            btn.style.width = `${this.estilo.width}px`;
+            btn.style.height = `${this.estilo.height}px`;
+            btn.style.fontSize = `${this.estilo.fontSize}px`;
+            btn.style.borderRadius = `${this.estilo.borderRadius}px`;
+            this.btnsGerados.append(btn);
+          },
+          validarDadosBotao() {
+            const widthIsValid = !!this.estilo.width && this.estilo.width > 0;
+            const heightIsValid =
+              !!this.estilo.height && this.estilo.height > 0;
+            const fontSizeIsValid =
+              !!this.estilo.fontSize && this.estilo.fontSize > 0;
+            const fontFamilyIsValid = !!this.estilo.fontFamily;
+            const textAlignIsValid = !!this.estilo.textAlign;
+            const borderRadiusIsValid =
+              (!!this.estilo.borderRadius && this.estilo.borderRadius > 0) ||
+              this.estilo.borderRadius === 0;
+            // console.log(
+            //   "=== Validação ===",
+            //   "Width: " + widthIsValid,
+            //   "Height: " + heightIsValid,
+            //   "FontSize: " + fontSizeIsValid,
+            //   "FontFamily: " + fontFamilyIsValid,
+            //   "TextAlign: " + textAlignIsValid,
+            //   "BorderRadius: " + borderRadiusIsValid
+            // );
+            const isValid =
+              widthIsValid &&
+              heightIsValid &&
+              fontSizeIsValid &&
+              fontFamilyIsValid &&
+              textAlignIsValid &&
+              borderRadiusIsValid;
+
+            !isValid && alert("Campos não validados");
+            return isValid;
+          },
+        },
+        computed: {
+          listFontFamily() {
+            return [
+              { name: "Cursive", value: "cursive" },
+              { name: "Sans Serif", value: "sans-serif" },
+              { name: "Serif", value: "serif" },
+            ];
+          },
+          listTextAlign() {
+            return [
+              { name: "Inicio", value: "start" },
+              { name: "Meio", value: "center" },
+              { name: "Fim", value: "end" },
+            ];
+          },
+          btnsGerados() {
+            return document.querySelector("#btnsGerados");
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

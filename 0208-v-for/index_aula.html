@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./../vue.js"></script>
+    <title>V-For</title>
+  </head>
+  <body>
+    <div id="app">
+      <ul>
+        <li v-for="item in lista" :key="item">{{ item }}</li>
+      </ul>
+      <button @click="removerItem">Remover item</button>
+      <button @click="modificarItem">Modificar item</button>
+
+      <p>
+        <ul>
+          <li v-for="(fruta, index) in frutas">{{ fruta }} - {{ index }}</li>
+        </ul>
+      </p>
+
+      <p>
+        <ul>
+          <li v-for="(estado, key, index) in estados">
+            {{ estado.nome }} - {{ estado.populacao }}
+          </li>
+        </ul>
+      </p>
+
+      <p>
+        <ul>
+          <li v-for="({nome, populacao}, key, index) in estados">
+            {{ nome }}
+          </li>
+        </ul>
+      </p>
+
+      <span v-for="numero in 5">{{ numero }}</span>
+    </div>
+
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          frutas: ["Banana", "Uva", "Laranja"],
+          estados: {
+            sp: {
+              populacao: "45 milhões",
+              nome: "São Paulo",
+            },
+            mg: {
+              populacao: "21 milhões",
+              nome: "Minas Gerais",
+            },
+            rj: {
+              populacao: "17 milhões",
+              nome: "Rio de Janeiro",
+            },
+          },
+          lista: ["Item 1", "Item 2", "Item 3"]
+        },
+        methods: {
+          removerItem() {
+            this.lista.pop(); // Ativa reatividade
+          },
+          modificarItem() {
+            this.$set(this.lista, 0, "Banana"); // Ativa reatividade
+            // this.lista[0] = "Banana"; // Não ativa reatividade
+            // this.lista = [...this.lista]; // Ativa reatividade
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

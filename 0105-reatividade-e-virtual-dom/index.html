@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./../vue.js"></script>
+    <title>Reatividade e virtual DOM</title>
+  </head>
+  <body>
+    <div id="app">
+      <p>Camisas - R$ <span>{{ dados.preco.toFixed(2) }}</span></p>
+      <button @click="dados.total++">Adicionar</button>
+      <button @click="dados.total--">Remover</button>
+      <span>{{ dados.total }}</span>
+      <p>Total: R$ <span>{{ (dados.total * dados.preco).toFixed(2) }}</span></p>
+    </div>
+
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          dados: {
+            preco: 49,
+            total: 0,
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

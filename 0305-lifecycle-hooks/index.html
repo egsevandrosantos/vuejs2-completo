@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./../vue.js"></script>
+    <title>Lifecycle hooks</title>
+  </head>
+  <body>
+    <!-- Utilize a api do github para
+    mostrar todos os seus dados na tela.
+    Faça o fetch das informações utilizando
+    um dos hooks do vue:
+
+    https://api.github.com/users/origamid (utilize o seu usuário)
+    -->
+
+    <!-- 
+      Crie um contador, onde seja possível clicar em
+      um botão e adicionar +1 ao número.
+
+      Toda vez que o contador mudar, mude o título da página
+      para o total do contador. Utilize um hook para isso
+    -->
+
+    <div id="app">
+      <div id="github" v-if="github">
+        <img :src="github.avatar_url" width="420px" height="420px" />
+        <p>Login: {{ github.login }}</p>
+        <a :href="github.html_url" target="_blank">Profile</a>
+        <a :href="github.html_url + '?tab=repositories'" target="_blank"
+          >Repos</a
+        >
+      </div>
+      <hr v-if="github" />
+      <p>Contador: {{ contador }}</p>
+      <button @click="contador++">Contador + 1</button>
+    </div>
+
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          github: undefined,
+          contador: 0,
+          contadorAnterior: 0,
+        },
+        methods: {
+          puxarGithub() {
+            fetch("https://api.github.com/users/egsevandrosantos")
+              .then((response) => response.json())
+              .then((json) => (this.github = json));
+          },
+        },
+        watch: {
+          contador(_, olderValue) {
+            contadorAnterior = olderValue;
+          },
+        },
+        created() {
+          this.puxarGithub();
+        },
+        updated() {
+          if (this.contador !== this.contadorAnterior) {
+            document.title = this.contador;
+          }
+        },
+      });
+    </script>
+  </body>
+</html>

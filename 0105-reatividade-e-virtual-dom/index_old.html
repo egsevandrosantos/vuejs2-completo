@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reatividade e virtual DOM</title>
+  </head>
+  <body>
+    <div>
+      <p>Camisas - R$ <span class="preco"></span></p>
+      <button class="adicionar">Adicionar</button>
+      <button class="remover">Remover</button>
+      <span class="total"></span>
+      <p>Total: R$ <span class="precoTotal"></span></p>
+    </div>
+
+    <script>
+      const dados = {
+        preco: 49,
+        total: 0,
+      };
+
+      const preco = document.querySelector(".preco");
+      const total = document.querySelector(".total");
+      const precoTotal = document.querySelector(".precoTotal");
+      const adicionar = document.querySelector(".adicionar");
+      const remover = document.querySelector(".remover");
+
+      const incrementar = () => {
+        dados.total++;
+        atualizarUI();
+      };
+
+      const decrementar = () => {
+        dados.total--;
+        atualizarUI();
+      };
+
+      const atualizarUI = () => {
+        total.innerText = dados.total;
+        precoTotal.innerText = (dados.preco * dados.total).toFixed(2);
+      };
+
+      preco.innerText = dados.preco.toFixed(2);
+      atualizarUI();
+
+      adicionar.addEventListener("click", incrementar);
+      remover.addEventListener("click", decrementar);
+    </script>
+  </body>
+</html>

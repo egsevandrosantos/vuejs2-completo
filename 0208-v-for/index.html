@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./../vue.js"></script>
+    <title>V-For</title>
+  </head>
+  <body>
+    <!--
+      Utilizando a api:
+      https://viacep.com.br/ws/04538133/json/
+      Mostre o cep, logradouro, complemento, bairro, localidade e uf do que for retornado.
+
+      
+      Use o arquivo json da aula, para listar os cursos e as matérias.
+    -->
+
+    <div id="app">
+      <div>
+        <p>Cep: {{ viaCep.cep || "N/A" }}</p>
+        <p>Logradouro: {{ viaCep.logradouro || "N/A" }}</p>
+        <p>Complemento: {{ viaCep.complemento || "N/A" }}</p>
+        <p>Bairro: {{ viaCep.bairro || "N/A" }}</p>
+        <p>Localidade: {{ viaCep.localidade || "N/A" }}</p>
+        <p>UF: {{ viaCep.uf || "N/A" }}</p>
+      </div>
+      <hr />
+      <div v-for="(curso) in cursos">
+        <p>Nome: {{ curso.curso }}</p>
+        <ul v-if="curso && curso.aulas && curso.aulas.length">
+          <li v-for="({ nome, tempo }) in curso.aulas">
+            {{ nome }} - Tempo: {{ tempo }}
+          </li>
+        </ul>
+        <p>
+          Link: <a :href="curso.link">Acesse aqui o curso {{ curso.curso }}</a>
+        </p>
+      </div>
+    </div>
+
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          viaCep: {},
+          cursos: {},
+        },
+        methods: {
+          buscarCep() {
+            fetch("https://viacep.com.br/ws/04538133/json/")
+              .then((response) => response.json())
+              .then((json) => (vm.viaCep = json));
+          },
+          buscarCursos() {
+            fetch("http://localhost:5500/0208-v-for/cursos.json")
+              .then((response) => response.json())
+              .then((json) => (vm.cursos = json));
+          },
+        },
+      });
+
+      vm.buscarCep();
+      vm.buscarCursos();
+    </script>
+  </body>
+</html>

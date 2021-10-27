@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./../vue.js"></script>
+    <title>Computed e Watch</title>
+  </head>
+  <body>
+    <div id="app">
+      <p>{{ total }}</p>
+      <ul>
+        <li v-for="carro in carrosAzuis">{{ carro.marca }} {{ carro.cor }}</li>
+      </ul>
+      <p>{{ contador }}</p>
+      <button @click="contador++">+</button>
+      <br /><br />
+      <div>
+        <input
+          type="text"
+          name="cep"
+          id="cep"
+          placeholder="cep"
+          maxlength="8"
+          v-model="cep"
+        />
+        <ul>
+          <li v-for="(local, key) in endereco">{{ key }} : {{ local }}</li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          cep: "",
+          endereco: {},
+          preco: 59,
+          desconto: 10,
+          carros: [
+            {
+              marca: "VW",
+              cor: "Azul",
+            },
+            {
+              marca: "Ford",
+              cor: "Preto",
+            },
+            {
+              marca: "Tesla",
+              cor: "Azul",
+            },
+          ],
+          contador: 0,
+        },
+        computed: {
+          total() {
+            return "R$ " + (this.preco - this.desconto).toFixed(2);
+          },
+          carrosAzuis() {
+            return this.carros.filter(({ cor }) => cor === "Azul");
+          },
+        },
+        watch: {
+          contador(valorNovo, valorAntigo) {
+            console.log(`Novo valor ${valorNovo}, valor antigo ${valorAntigo}`);
+          },
+          carros() {
+            console.log(this.carros);
+          },
+          cep(value) {
+            if (value && value.length === 8) {
+              fetch(`https://viacep.com.br/ws/${value}/json/`)
+                .then((response) => response.json())
+                .then((json) => (this.endereco = json));
+            }
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

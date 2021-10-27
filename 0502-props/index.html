@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./../vue.js"></script>
+    <title>Props</title>
+  </head>
+  <body>
+    <!-- 
+      Crie um componente com um campo de input e um botão para enviar o valor.
+      Nesse campo de input será possível escrever o simbolo de empresas americanas
+
+      simbolos ex:
+      aapl -> Apple
+      goog -> Google
+      msft -> Microsoft
+      amzn -> Amazon
+      fb -> Facebook
+
+      Ao clicar no botão, faça um fetch com a API:
+      https://api.origamid.dev/stock/${SIMBOLO}/quote
+
+      O resultado do fetch deverá ser mostrado em um componente filho do formulário.
+      Envia as informações utilizando prop
+
+      Mostre todas as informações do fetch utilizando um loop.
+    -->
+    <div id="app">
+      <escolher-empresa></escolher-empresa>
+    </div>
+
+    <script>
+      const FetchEmpresa = {
+        name: "FetchEmpresa",
+        props: ["nomeEmpresa"],
+        data() {
+          return {
+            empresa: undefined,
+            empresaAcoes: undefined,
+          };
+        },
+        computed: {
+          empresas() {
+            return [
+              { sigla: "aapl", name: "Apple" },
+              { sigla: "goog", name: "Google" },
+              { sigla: "msft", name: "Microsoft" },
+              { sigla: "amzn", name: "Amazon" },
+              { sigla: "fb", name: "Facebook" },
+            ];
+          },
+        },
+        methods: {
+          fetchEmpresa() {
+            fetch(`https://api.origamid.dev/stock/${this.empresa.sigla}/quote`)
+              .then((response) => response.json())
+              .then((json) => (this.empresaAcoes = json));
+          },
+          validarEmpresa() {
+            this.empresa = this.empresas.find(
+              ({ sigla, name }) =>
+                sigla === this.nomeEmpresa || name === this.nomeEmpresa
+            );
+            return !!this.empresa;
+          },
+        },
+        watch: {
+          nomeEmpresa() {
+            this.empresaAcoes = undefined;
+            this.validarEmpresa() && this.fetchEmpresa();
+          },
+        },
+        template: `
+          <div>
+            <template v-if="empresa">
+              <ul v-if="empresaAcoes">
+                <li v-for="(value, key) in empresaAcoes">{{ key }}: {{ value }}</li>
+              </ul>
+            </template>
+            <template v-else-if="nomeEmpresa">
+              <p>Empresa {{ nomeEmpresa }} não encontrada</p>
+            </template>
+          </div>
+        `,
+      };
+
+      const EscolherEmpresa = {
+        name: "EscolherEmpresa",
+        data() {
+          return {
+            inputEmpresa: undefined,
+            empresa: undefined,
+          };
+        },
+        template: `
+          <div>
+            <p>
+              <label for="empresa">Digite a empresa:</label>
+              <input type="text" name="empresa" id="empresa" v-model.lazy="inputEmpresa" />
+            </p>
+            <button @click="empresa = inputEmpresa">Buscar empresa</button>
+            <fetch-empresa :nomeEmpresa="empresa"></fetch-empresa>
+          </div>
+        `,
+        components: {
+          FetchEmpresa,
+        },
+      };
+
+      const vm = new Vue({
+        el: "#app",
+        components: {
+          EscolherEmpresa,
+        },
+      });
+    </script>
+  </body>
+</html>

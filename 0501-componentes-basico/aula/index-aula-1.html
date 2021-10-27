@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./../vue.js"></script>
+    <title>Componentes Basico</title>
+  </head>
+  <body>
+    <div id="app">
+      <botao-contador></botao-contador>
+      <!-- <componente-global></componente-global> -->
+      <componente-local></componente-local>
+      <componente-local-2></componente-local-2>
+    </div>
+
+    <script>
+      Vue.component("BotaoContador", {
+        data() {
+          return {
+            contador: 0,
+          };
+        },
+        methods: {
+          mostrarConsole() {
+            console.log("BotaoContador");
+          },
+        },
+        template: `
+          <div id="app">
+            <p>Contador: {{ contador }}</p>
+            <button @click="contador++; mostrarConsole()">Contador +1</button>
+          </div>
+        `,
+      });
+
+      Vue.component("ComponenteGlobal", {
+        template: `<p>Componente global</p>`,
+      });
+
+      const ComponenteLocal = {
+        name: "ComponenteLocal",
+        template: `
+          <div>
+            <componente-global></componente-global>
+            <p>Componente local</p>  
+          </div>
+        `,
+      };
+
+      const vm = new Vue({
+        el: "#app",
+        data: {},
+        components: {
+          ComponenteLocal,
+          ComponenteLocal2: {
+            name: "ComponenteLocal2",
+            template: `<p>Componente local 2</p>`,
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

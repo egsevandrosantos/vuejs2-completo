@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./../vue.js"></script>
+    <title>Events</title>
+  </head>
+  <body>
+    <div id="app">
+      {{ totalClientes }}
+      <meu-botao @origamid="origamid"></meu-botao>
+      <br />
+      {{ contador }}
+      <meu-botao2
+        //:contador="contador"
+        //@update:contador="contador = $event"
+        :contador.sync="contador" // Faz a mesma coisa que as duas linhas acima
+      ></meu-botao2>
+    </div>
+
+    <script type="module">
+      const MeuBotao = {
+        name: "MeuBotao",
+        data() {
+          return {
+            totalClientes: 200,
+          };
+        },
+        template: `<button @click="handleClick">Recuperar total de clientes</button>`,
+        methods: {
+          handleClick() {
+            this.$emit("origamid", this.totalClientes);
+          },
+        },
+      };
+
+      const MeuBotao2 = {
+        name: "MeuBotao2",
+        props: ["contador"],
+        template: `<button @click="incrementar">Botão 2 - {{ contador }}</button>`,
+        methods: {
+          incrementar() {
+            let refContador = this.contador; // Se atualizar direto o this.contador vue reclamara por atualizar uma prop do componente pai no componente
+            this.$emit("update:contador", ++refContador);
+          },
+        },
+      };
+
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          totalClientes: 0,
+          contador: 0,
+        },
+        methods: {
+          origamid(totalClientes) {
+            this.totalClientes = totalClientes;
+          },
+        },
+        components: {
+          MeuBotao,
+          MeuBotao2,
+        },
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./../vue.js"></script>
+    <title>Class e Style</title>
+  </head>
+  <body>
+    <div id="app">
+      <p :class="[cor, background, { ativo: estaAtivo }]">Class cor Vue</p>
+      <!-- <p :class="cor, background">Class cor Vue</p> -->
+      <p :class="{ ativo: estaAtivo, verde: elementoVerde }">Mostrar texto</p>
+      <button @click="estaAtivo = !estaAtivo">Ativar/Desativar</button>
+      <hr />
+      <a :style="{background: bgColor, fontSize: fontSize + 'px'}">Estilize</a>
+      <button @click="fontSize += 2">Aumentar</button>
+      <p :style="estiloBotao">Novo texto</p>
+      <p :style="estiloParagrafo">Estilo paragrafo</p>
+    </div>
+
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          cor: "azul",
+          background: "amarelo",
+          estaAtivo: false,
+          elementoVerde: true,
+          bgColor: "blue",
+          fontSize: 20,
+          estiloBotao: {
+            background: "tomato",
+            fontSize: "20px",
+            color: "#FFF",
+          },
+        },
+        computed: {
+          estiloParagrafo() {
+            const tamanho = Math.random() * 100;
+            return { fontSize: tamanho + "px" };
+          },
+        },
+      });
+    </script>
+
+    <style>
+      .amarelo {
+        background: yellow;
+      }
+      .azul {
+        color: blue;
+      }
+      .verde {
+        color: green;
+      }
+      .ativo {
+        background: red;
+      }
+    </style>
+  </body>
+</html>

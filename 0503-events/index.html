@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Events</title>
+    <script src="./../vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <componente-um></componente-um>
+      <componente-dois></componente-dois>
+    </div>
+
+    <script type="module">
+      const EventBus = new Vue();
+
+      EventBus.$on("meuevento", (ev) => {
+        console.log("Meu evento", ev);
+      });
+
+      const ComponenteUm = {
+        name: "ComponenteUm",
+        data() {
+          return {
+            mensagem: "Esse é o componente um",
+          };
+        },
+        template: `<p @click="emitirEvento">Componente Um</p>`,
+        methods: {
+          emitirEvento() {
+            EventBus.$emit("meuevento", this.mensagem);
+          },
+        },
+      };
+
+      const ComponenteDois = {
+        name: "ComponenteDois",
+        data() {
+          return {
+            mensagem: "",
+          };
+        },
+        template: `<p>Componente Dois - {{ mensagem }}</p>`,
+        created() {
+          EventBus.$on("meuevento", (ev) => {
+            this.mensagem = ev;
+          });
+        },
+      };
+
+      const vm = new Vue({
+        el: "#app",
+        components: {
+          ComponenteUm,
+          ComponenteDois,
+        },
+      });
+    </script>
+  </body>
+</html>

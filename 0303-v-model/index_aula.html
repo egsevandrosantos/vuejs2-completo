@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./../vue.js"></script>
+    <title>V-Model</title>
+  </head>
+  <body>
+    <div id="app">
+      <input type="text" v-model="nome" />
+      <textarea v-model="mensagem"></textarea>
+      {{ nome }} {{ mensagem }}
+
+      <hr />
+
+      <input v-model.trim="nome" />
+      <!-- Two way data bind (do javascript pro dom e do dom pro javascript)-->
+      <input :value="email" />
+      <!-- One way data bind (do javascript pro dom) -->
+
+      <p>Nome {{nome}}</p>
+      <p>Email {{email}}</p>
+
+      <hr />
+
+      <input type="checkbox" v-model="receberEmail" id="receberEmail" />
+      <label for="receberEmail">Receber email: {{ receberEmail }}</label>
+      <input type="checkbox" v-model="aceitarTermos" id="aceitarTermos" />
+      <label for="aceitarTermos">Aceitar termos: {{ aceitarTermos }}</label>
+
+      <hr />
+
+      <input type="radio" v-model="cor" value="Azul" id="corAzul" />
+      <label for="corAzul">Azul</label>
+      <input type="radio" v-model="cor" value="Vermelho" id="corVermelho" />
+      <label for="corVermelho">Vermelho</label>
+      <p>Cor selecionada: {{ cor }}</p>
+
+      <input type="radio" v-model="moeda" value="BRL" id="moedaBRL" />
+      <label for="moedaBRL">BRL</label>
+      <input type="radio" v-model="moeda" value="USS" id="moedaUSS" />
+      <label for="moedaUSS">USS</label>
+      <p>Moeda selecionada: {{ moeda }}</p>
+
+      <hr />
+
+      <select v-model="fruta">
+        <option value="" disabled>Selecione</option>
+        <option value="banana">Banana</option>
+        <option value="melao">Melão</option>
+      </select>
+      <p>Fruta selecionada: {{ fruta }}</p>
+
+      <select v-model="marca">
+        <option value="adidas">Adidas</option>
+        <option value="nike">Nike</option>
+      </select>
+      <p>Marca selecionada: {{ marca }}</p>
+
+      <hr />
+
+      <input type="text" v-model.lazy="nomeLazy" />
+      <p>{{ nomeLazy }}</p>
+
+      <input type="text" v-model.number="ano" />
+      {{ ano }}
+    </div>
+
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          nome: "André",
+          email: "contato@origamid.com",
+          mensagem: "",
+          receberEmail: true,
+          aceitarTermos: undefined,
+          cor: undefined,
+          moeda: "BRL",
+          fruta: "",
+          marca: "nike",
+          nomeLazy: "Evandro",
+          ano: undefined,
+        },
+      });
+    </script>
+  </body>
+</html>

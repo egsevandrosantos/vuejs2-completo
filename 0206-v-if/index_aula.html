@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./../vue.js"></script>
+    <title>V If</title>
+  </head>
+  <body>
+    <div id="app">
+      <p v-if="logado">Usuário logado</p>
+      <p v-else>Usuário deslogado</p>
+
+      <p v-if="numero < 0">Número negativo</p>
+      <p v-else-if="numero === 0">Número neutro</p>
+      <p v-else>Número positivo</p>
+
+      <template v-if="logado">
+        <p>Usuário logado</p>
+        <button @click="logado = false">Deslogar</button>
+      </template>
+      <template v-else>
+        <p>Usuário deslogado</p>
+        <button @click="logado = true">Logar</button>
+      </template>
+
+      <p v-if="show">Sou um v-if</p>
+      <p v-show="show">Sou um v-show</p>
+      <!-- v-show não funciona em template pois precisa adicionar display none na tag e template não é renderizado -->
+      <button @click="show = !show">Toggle show</button>
+    </div>
+
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          logado: true,
+          numero: 1,
+          show: true,
+        },
+      });
+    </script>
+  </body>
+</html>

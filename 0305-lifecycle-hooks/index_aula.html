@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./../vue.js"></script>
+    <title>Lifecycle hooks</title>
+  </head>
+  <body>
+    <div id="app">
+      <p>{{ mensagem }}</p>
+      <p>{{ github }}</p>
+      <button @click="contador++">{{ contador }}</button>
+      <button @click="destruir">Destruir</button>
+    </div>
+
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          mensagem: "Hello lifecycles",
+          github: {},
+          contador: 0,
+        },
+        methods: {
+          puxarGithub() {
+            fetch("https://api.github.com/users/origamid")
+              .then((response) => response.json())
+              .then((json) => (this.github = json));
+          },
+          destruir() {
+            this.$destroy();
+          },
+        },
+        beforeCreate() {
+          // Ainda não existe a instancia vm, não tem o dom (el), não tem variaveis, metodos e o template ainda não foi substituido, requisições proprias ainda pendente
+          console.log("Before create");
+          // debugger;
+        },
+        created() {
+          // Ainda não existe a instancia vm, não tem o dom (el), tem variaveis, metodos e o template ainda não foi substituido, requisições proprias ainda pendente
+          console.log("Created");
+          this.puxarGithub();
+          // debugger;
+        },
+        beforeMount() {
+          // Ainda não existe a instancia vm, tem o dom (el), tem variaveis, metodos e o template ainda não foi substituido, requisições proprias ainda pendente
+          console.log("Before mount");
+          // debugger;
+        },
+        mounted() {
+          // Ainda não existe a instancia vm, tem o dom (el), tem variaveis, metodos e o template já foi substituido, requisições proprias ainda pendente
+          console.log("Mounted");
+          // debugger;1
+        },
+        beforeUpdate() {
+          // Existe a instancia vm, tem o dom (el), tem variaveis, metodos e o template já foi substituido, requisições proprias concluidas, variaveis atualizadas, dom ainda não atualizado (não executa por padrão, apenas quando há reativade em algum dado)
+          console.log("Before update");
+          // debugger;
+        },
+        updated() {
+          // Existe a instancia vm, tem o dom (el), tem variaveis, metodos e o template já foi substituido, requisições proprias concluidas, variaveis atualizadas, dom atualizado (não executa por padrão, apenas quando há reativade em algum dado)
+          console.log("Updated");
+          // debugger;
+        },
+        beforeDestroy() {
+          // (não executa por padrão, apenas quando vai destruir o componente)
+          console.log("Before destroy");
+        },
+        destroyed() {
+          // (não executa por padrão, apenas quando vai destruir o componente)
+          console.log("Destroyed");
+        },
+      });
+    </script>
+  </body>
+</html>

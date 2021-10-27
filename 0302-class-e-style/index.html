@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./../vue.js"></script>
+    <title>Class e Style</title>
+  </head>
+  <body>
+    <div id="app">
+      <!-- Crie um botão que troque a orientação da lista, ou seja,
+      ao invés de 4 colunas, uma única coluna com 4 linhas.
+
+      O botão será responsável por trocar para lista e também
+      responsável por reverter esse processo.
+      Utilize adição/remoção de classes para atingir este efeito.
+
+      A classe column já está criada, basta utilizar ela.
+      -->
+
+      <ul :class="{ column: orientacaoEmColuna }">
+        <li>Sobre</li>
+        <li>Produtos</li>
+        <li>Serviços</li>
+        <li>Contato</li>
+      </ul>
+      <button @click="orientacaoEmColuna = !orientacaoEmColuna">
+        Alterar orientação
+      </button>
+
+      <!-- Crie um gerador de cores, toda vez que o usuário clicar
+      em cima da lista, os itens trocam de cor.
+
+      Gerador de cor:
+      const color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+      -->
+      <ul @click="changeColors = false" v-if="changeColors">
+        <li :style="gerarCor()">Cor 1</li>
+        <li :style="gerarCor()">Cor 2</li>
+        <li :style="gerarCor()">Cor 3</li>
+      </ul>
+
+      <hr />
+      <ul @click="gerarNovasCores">
+        <li :style="bgColor1">Cor 1</li>
+        <li :style="bgColor2">Cor 2</li>
+        <li :style="bgColor3">Cor 3</li>
+      </ul>
+    </div>
+
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          orientacaoEmColuna: false,
+          changeColors: true,
+          bgColor1: "",
+          bgColor2: "",
+          bgColor3: "",
+        },
+        methods: {
+          gerarCor() {
+            return { background: `hsl(${Math.random() * 360}, 100%, 50%)` };
+          },
+          gerarNovasCores() {
+            this.bgColor1 = this.gerarCor();
+            this.bgColor2 = this.gerarCor();
+            this.bgColor3 = this.gerarCor();
+          },
+        },
+        watch: {
+          changeColors() {
+            this.changeColors = true;
+          },
+        },
+      });
+    </script>
+
+    <style>
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        font-family: monospace;
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+      }
+      .column {
+        flex-direction: column;
+      }
+      li {
+        padding: 20px;
+        background: #84e;
+        color: white;
+        border-radius: 4px;
+        margin: 10px;
+        flex: 1;
+        text-align: center;
+      }
+    </style>
+  </body>
+</html>

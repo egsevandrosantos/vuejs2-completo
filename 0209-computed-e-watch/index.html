@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./../vue.js"></script>
+    <title>Computed e Watch</title>
+  </head>
+  <body>
+    <!--
+      Você possui o nome e sobrenome do usuário em data,
+      crie uma propriedade computed que retorne o nome completo
+      
+      Utilize a rest API para puxar as capitais dos paises
+      Use um campo de select, onde o usuário pode selecionar o país.
+      https://restcountries.eu/rest/v2/all
+
+      Com uma função watch, mude a capital de acordo com o país selecionado:
+
+      Ex de campo select:
+
+      <select name="paises" id="paises" v-model="selecionado">
+        <option v-for="pais in paises" :value="pais.name">
+          {{pais.name}}
+        </option>
+      </select>
+    -->
+    <div id="app">
+      <p>Nome completo: {{ nomeCompleto }}</p>
+
+      <select name="paises" id="paises" v-model="paisSelecionado">
+        <option selected disabled :value="undefined">Selecione</option>
+        <option v-for="pais in paises" :value="pais">{{ pais.name }}</option>
+      </select>
+      <p v-if="paisSelecionado && capital">
+        Capital de {{ paisSelecionado.name }} é {{ capital }}
+      </p>
+    </div>
+
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          nome: "Evandro",
+          sobrenome: "Santos",
+          paises: {},
+          paisSelecionado: undefined,
+          capital: undefined,
+        },
+        methods: {
+          carregarPaises() {
+            fetch("https://restcountries.eu/rest/v2/all")
+              .then((response) => response.json())
+              .then((json) => (this.paises = json));
+          },
+        },
+        computed: {
+          nomeCompleto() {
+            return `${this.nome} ${this.sobrenome}`;
+          },
+        },
+        watch: {
+          paisSelecionado(pais) {
+            if (pais) {
+              this.capital = pais.capital;
+            }
+          },
+        },
+      });
+
+      vm.carregarPaises();
+    </script>
+  </body>
+</html>
